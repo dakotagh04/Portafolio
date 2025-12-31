@@ -1,18 +1,51 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Portafolio de Arte Generativo</title>
 
-    <title>Sketch</title>
+  <!-- p5 -->
+  <script src="libraries/p5.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+  <!-- Estilos -->
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <script src="libraries/p5.min.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
-  </head>
+<body>
 
-  <body>
-    <script src="sketch.js"></script>
-  </body>
+  <header>
+    <h1>Portafolio de Arte Generativo</h1>
+    <p>Exploraciones visuales e interactivas</p>
+  </header>
+
+  <main class="gallery">
+
+    <div class="artwork" onclick="openArtwork('obras/obra1/obra1.html')">
+      <div id="preview1" class="preview"></div>
+      <h2>Obra I</h2>
+    </div>
+
+    <div class="artwork" onclick="openArtwork('obras/obra2/obra2.html')">
+      <div id="preview2" class="preview"></div>
+      <h2>Obra II</h2>
+    </div>
+
+    <div class="artwork" onclick="openArtwork('obras/obra3/obra3.html')">
+      <div id="preview3" class="preview"></div>
+      <h2>Obra III</h2>
+    </div>
+
+    <div class="artwork" onclick="openArtwork('obras/obra4/obra4.html')">
+      <div id="preview4" class="preview"></div>
+      <h2>Obra IV</h2>
+    </div>
+
+  </main>
+
+  <footer>
+    <p>© 2025 — Portafolio artístico</p>
+  </footer>
+
+  <script src="sketch.js"></script>
+</body>
 </html>

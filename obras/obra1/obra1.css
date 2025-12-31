@@ -1,0 +1,28 @@
+/* ---------------- GLOBAL STYLES ---------------- */
+body {
+  margin: 0;
+  background: #f5f5f0; /* Fondo por defecto */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  font-family: "Times New Roman", serif; /* se puede mantener global */
+}
+
+/* Botón home siempre visible */
+#homeBtn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+  font-size: 28px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

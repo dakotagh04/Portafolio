@@ -1,8 +1,82 @@
-html, body {
+/* RESET */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-canvas {
-  display: block;
+/* COLORES MUSEO */
+:root {
+  --marble: #f5f5f0;
+  --ink: #1e1e1e;
+  --gold: #b59b5b;
+}
+
+/* BODY */
+body {
+  font-family: 'Times New Roman', serif;
+  background-color: var(--marble);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  text-align: center;
+  padding: 4rem 2rem 2rem;
+}
+
+header h1 {
+  font-size: 3rem;
+  letter-spacing: 2px;
+}
+
+header p {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #555;
+}
+
+/* GALERÍA */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem;
+  padding: 4rem;
+  max-width: 1400px;
+  margin: auto;
+}
+
+/* OBRA */
+.artwork {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.artwork:hover {
+  transform: scale(1.02);
+}
+
+/* PREVIEW 16:9 */
+.preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #ddd;
+  border: 2px solid var(--ink);
+}
+
+/* TÍTULO OBRA */
+.artwork h2 {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 2rem;
+  font-size: 0.9rem;
+  color: #777;
 }
