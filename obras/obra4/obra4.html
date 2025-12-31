@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego de la Vida de Conway - Variación Creativa</title>
+    <link rel="stylesheet" href="obra4.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  </head>
+  <body>
+    <div id="container">
+      <header>
+        <h1>Juego de la Vida de Conway</h1>
+        <p>
+          Con variación creativa: células con colores que evolucionan y patrones
+          emergentes
+        </p>
+      </header>
+
+      <div id="controls">
+        <button id="start">Iniciar/Pausar</button>
+        <button id="reset">Reiniciar</button>
+        <button id="random">Aleatorio</button>
+        <button id="clear">Limpiar</button>
+        <div class="slider-container">
+          <label for="speed">Velocidad:</label>
+          <input type="range" id="speed" min="1" max="60" value="10" />
+          <span id="speed-value">10 fps</span>
+        </div>
+        <div class="slider-container">
+          <label for="density">Densidad inicial:</label>
+          <input type="range" id="density" min="1" max="100" value="25" />
+          <span id="density-value">25%</span>
+        </div>
+      </div>
+
+      <div id="canvas-container"></div>
+
+      <div id="info">
+        <div id="generation">Generación: 0</div>
+        <div id="population">Población: 0</div>
+      </div>
+
+      <div id="instructions">
+        <h3>Instrucciones:</h3>
+        <ul>
+          <li>Haz clic en la cuadrícula para activar/desactivar células</li>
+          <li>Arrastra para pintar múltiples células</li>
+          <li>Usa los controles para modificar la simulación</li>
+        </ul>
+      </div>
+    </div>
+
+    <script src="obra4.js"></script>
+  </body>
+</html>
