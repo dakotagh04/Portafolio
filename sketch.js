@@ -175,19 +175,119 @@ new p5(p => {
   };
 });
 
-/* -------- PREVIEW 4 -------- */
+/* -------- PREVIEW 4 (Juego de la Vida - obra4) -------- */
 new p5(p => {
+  const resolution = 8; // tamaño de celda ligeramente mayor
+  let cols, rows;
+  let grid = [];
+
+  // Colores base
+  const COLOR_BLUE = { r: 74, g: 127, b: 167 };
+  const COLOR_GOLD = { r: 201, g: 178, b: 109 };
+  const COLOR_WHITE = { r: 255, g: 255, b: 255 };
+
   p.setup = () => {
-    const c = p.createCanvas(
-      document.getElementById('preview4').offsetWidth,
-      document.getElementById('preview4').offsetHeight
-    );
+    const container = document.getElementById('preview4');
+    const c = p.createCanvas(container.offsetWidth, container.offsetHeight);
     c.parent('preview4');
+
+    cols = Math.floor(p.width / resolution);
+    rows = Math.floor(p.height / resolution);
+
+    // Inicializar grid con células aleatorias, baja densidad
+    grid = createGrid(cols, rows);
   };
 
   p.draw = () => {
-    p.background(250);
-    p.stroke(0);
-    p.point(p.random(p.width), p.random(p.height));
+    p.background(245, 244, 238);
+
+    drawGrid();
+
+    // Avanzar una generación cada pocos frames
+    if (p.frameCount % 10 === 0) {
+      grid = calculateNextGeneration(grid);
+    }
   };
+
+  function createGrid(cols, rows) {
+    let arr = new Array(cols);
+    for (let i = 0; i < cols; i++) {
+      arr[i] = new Array(rows);
+      for (let j = 0; j < rows; j++) {
+        let alive = p.random() < 0.1; // 🔹 Baja densidad: 10% de probabilidad
+        arr[i][j] = {
+          state: alive ? 1 : 0,
+          life: alive ? p.random(0.3, 1) : 0
+        };
+      }
+    }
+    return arr;
+  }
+
+  function drawGrid() {
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        let x = i * resolution;
+        let y = j * resolution;
+
+        if (grid[i][j].state === 1) {
+          const c = getColorByLife(grid[i][j].life);
+          p.fill(c.r, c.g, c.b);
+        } else {
+          p.fill(230, 227, 215);
+        }
+        p.noStroke();
+        p.rect(x, y, resolution, resolution);
+      }
+    }
+  }
+
+  function getColorByLife(life) {
+    if (life > 0.5) {
+      let t = p.map(life, 0.5, 1, 0, 1);
+      return {
+        r: p.lerp(COLOR_GOLD.r, COLOR_BLUE.r, t),
+        g: p.lerp(COLOR_GOLD.g, COLOR_BLUE.g, t),
+        b: p.lerp(COLOR_GOLD.b, COLOR_BLUE.b, t)
+      };
+    } else {
+      let t = p.map(life, 0, 0.5, 0, 1);
+      return {
+        r: p.lerp(COLOR_WHITE.r, COLOR_GOLD.r, t),
+        g: p.lerp(COLOR_WHITE.g, COLOR_GOLD.g, t),
+        b: p.lerp(COLOR_WHITE.b, COLOR_GOLD.b, t)
+      };
+    }
+  }
+
+  function calculateNextGeneration(grid) {
+    let next = createGrid(cols, rows);
+    for (let i = 0; i < cols; i++) {
+      for (let j = 0; j < rows; j++) {
+        let neighbors = countNeighbors(grid, i, j);
+        let cell = grid[i][j];
+
+        if (cell.state === 0 && neighbors === 3) {
+          next[i][j].state = 1;
+          next[i][j].life = 1;
+        } else if (cell.state === 1 && (neighbors === 2 || neighbors === 3)) {
+          next[i][j].state = 1;
+          next[i][j].life = Math.max(cell.life - 0.05, 0);
+        }
+      }
+    }
+    return next;
+  }
+
+  function countNeighbors(grid, x, y) {
+    let sum = 0;
+    for (let i = -1; i <= 1; i++) {
+      for (let j = -1; j <= 1; j++) {
+        let col = (x + i + cols) % cols;
+        let row = (y + j + rows) % rows;
+        sum += grid[col][row].state;
+      }
+    }
+    return sum - grid[x][y].state;
+  }
 });
