@@ -1,4 +1,3 @@
-// Variables globales
 let grid;
 let cols;
 let rows;
@@ -8,216 +7,197 @@ let generation = 0;
 let population = 0;
 let frameRateValue = 10;
 
-// Colores para la variación creativa
-let colors = [
-    { r: 76, g: 201, b: 240 },  // Azul claro
-    { r: 67, g: 97, b: 238 },   // Azul
-    { r: 156, g: 39, b: 176 },  // Púrpura
-    { r: 233, g: 30, b: 99 },   // Rosa
-    { r: 255, g: 152, b: 0 },   // Naranja
-    { r: 76, g: 175, b: 80 }    // Verde
-];
+// Colores museo griego
+const COLOR_BLUE = { r: 74, g: 127, b: 167 };
+const COLOR_GOLD = { r: 201, g: 178, b: 109 };
+const COLOR_WHITE = { r: 255, g: 255, b: 255 };
 
 function setup() {
-    let canvasContainer = document.getElementById('canvas-container');
-    let canvas = createCanvas(800, 600);
-    canvas.parent('canvas-container');
-    
-    cols = Math.floor(width / resolution);
-    rows = Math.floor(height / resolution);
-    grid = createGrid(cols, rows);
-    
-    document.getElementById('start').addEventListener('click', togglePlay);
-    document.getElementById('reset').addEventListener('click', resetGrid);
-    document.getElementById('random').addEventListener('click', randomizeGrid);
-    document.getElementById('clear').addEventListener('click', clearGrid);
-    
-    document.getElementById('speed').addEventListener('input', updateSpeed);
-    document.getElementById('density').addEventListener('input', updateDensity);
-    
-    updateSpeed();
-    updateDensity();
-    
-    drawGrid();
+  let canvas = createCanvas(800, 600);
+  canvas.parent("canvas-container");
+
+  cols = floor(width / resolution);
+  rows = floor(height / resolution);
+  grid = createGrid(cols, rows);
+
+  document.getElementById("start").onclick = togglePlay;
+  document.getElementById("reset").onclick = resetGrid;
+  document.getElementById("random").onclick = randomizeGrid;
+  document.getElementById("clear").onclick = clearGrid;
+  document.getElementById("speed").oninput = updateSpeed;
+  document.getElementById("density").oninput = updateDensity;
+
+  updateSpeed();
+  updateDensity();
 }
 
 function draw() {
-    if (isPlaying) {
-        grid = calculateNextGeneration(grid);
-        generation++;
-        updateInfo();
-    }
-    drawGrid();
+  frameRate(frameRateValue);
+  background(245, 244, 238);
+
+  if (isPlaying) {
+    grid = calculateNextGeneration(grid);
+    generation++;
+    updateInfo();
+  }
+
+  drawGrid();
 }
 
 function createGrid(cols, rows) {
-    let arr = new Array(cols);
-    for (let i = 0; i < arr.length; i++) {
-        arr[i] = new Array(rows);
-        for (let j = 0; j < arr[i].length; j++) {
-            arr[i][j] = {
-                state: 0,
-                age: 0,
-                color: colors[Math.floor(Math.random() * colors.length)]
-            };
-        }
+  let arr = [];
+  for (let i = 0; i < cols; i++) {
+    arr[i] = [];
+    for (let j = 0; j < rows; j++) {
+      arr[i][j] = { state: 0, life: 0 };
     }
-    return arr;
+  }
+  return arr;
 }
 
 function drawGrid() {
-    background(26, 26, 46);
-    
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-            let x = i * resolution;
-            let y = j * resolution;
-            
-            if (grid[i][j].state === 1) {
-                let cellColor = grid[i][j].color;
-                let ageFactor = Math.min(grid[i][j].age / 10, 1);
-                
-                let r = cellColor.r + (255 - cellColor.r) * ageFactor;
-                let g = cellColor.g + (255 - cellColor.g) * ageFactor;
-                let b = cellColor.b + (255 - cellColor.b) * ageFactor;
-                
-                fill(r, g, b);
-                
-                let sizeFactor = 0.8 + (0.2 * ageFactor);
-                let cellSize = resolution * sizeFactor;
-                
-                let offset = (resolution - cellSize) / 2;
-                rect(x + offset, y + offset, cellSize, cellSize, 2);
-            } else {
-                fill(40, 40, 60);
-                stroke(60, 60, 80);
-                strokeWeight(0.5);
-                rect(x, y, resolution, resolution);
-                noStroke();
-            }
-        }
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      let x = i * resolution;
+      let y = j * resolution;
+
+      if (grid[i][j].state === 1) {
+        let c = getColorByLife(grid[i][j].life);
+        fill(c.r, c.g, c.b);
+        noStroke();
+        rect(x, y, resolution, resolution);
+      } else {
+        fill(230, 227, 215);
+        stroke(210, 205, 185);
+        rect(x, y, resolution, resolution);
+        noStroke();
+      }
     }
+  }
+}
+
+function getColorByLife(life) {
+  if (life > 0.5) {
+    let t = map(life, 0.5, 1, 0, 1);
+    return {
+      r: lerp(COLOR_GOLD.r, COLOR_BLUE.r, t),
+      g: lerp(COLOR_GOLD.g, COLOR_BLUE.g, t),
+      b: lerp(COLOR_GOLD.b, COLOR_BLUE.b, t)
+    };
+  } else {
+    let t = map(life, 0, 0.5, 0, 1);
+    return {
+      r: lerp(COLOR_WHITE.r, COLOR_GOLD.r, t),
+      g: lerp(COLOR_WHITE.g, COLOR_GOLD.g, t),
+      b: lerp(COLOR_WHITE.b, COLOR_GOLD.b, t)
+    };
+  }
 }
 
 function calculateNextGeneration(grid) {
-    let next = createGrid(cols, rows);
-    population = 0;
-    
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-            let state = grid[i][j].state;
-            let neighbors = countNeighbors(grid, i, j);
-            
-            if (state === 0 && neighbors === 3) {
-                next[i][j].state = 1;
-                next[i][j].color = colors[Math.floor(Math.random() * colors.length)];
-                population++;
-            } else if (state === 1 && (neighbors === 2 || neighbors === 3)) {
-                next[i][j].state = 1;
-                next[i][j].age = grid[i][j].age + 1;
-                next[i][j].color = grid[i][j].color;
-                population++;
-            } else {
-                next[i][j].state = 0;
-                next[i][j].age = 0;
-            }
-        }
+  let next = createGrid(cols, rows);
+  population = 0;
+
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      let n = countNeighbors(grid, i, j);
+      let c = grid[i][j];
+
+      if (c.state === 0 && n === 3) {
+        next[i][j].state = 1;
+        next[i][j].life = 1;
+        population++;
+      } else if (c.state === 1 && (n === 2 || n === 3)) {
+        next[i][j].state = 1;
+        next[i][j].life = max(c.life - 0.03, 0);
+        if (next[i][j].life > 0) population++;
+      }
     }
-    
-    return next;
+  }
+  return next;
 }
 
 function countNeighbors(grid, x, y) {
-    let sum = 0;
-    for (let i = -1; i < 2; i++) {
-        for (let j = -1; j < 2; j++) {
-            let col = (x + i + cols) % cols;
-            let row = (y + j + rows) % rows;
-            sum += grid[col][row].state;
-        }
+  let sum = 0;
+  for (let i = -1; i <= 1; i++) {
+    for (let j = -1; j <= 1; j++) {
+      let col = (x + i + cols) % cols;
+      let row = (y + j + rows) % rows;
+      sum += grid[col][row].state;
     }
-    sum -= grid[x][y].state;
-    return sum;
+  }
+  return sum - grid[x][y].state;
 }
 
 function mousePressed() {
-    if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-        let i = Math.floor(mouseX / resolution);
-        let j = Math.floor(mouseY / resolution);
-        grid[i][j].state = grid[i][j].state === 0 ? 1 : 0;
-        if (grid[i][j].state === 1) {
-            grid[i][j].color = colors[Math.floor(Math.random() * colors.length)];
-            grid[i][j].age = 0;
-        }
-        updateInfo();
-    }
+  paintCell();
 }
 
 function mouseDragged() {
-    if (mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
-        let i = Math.floor(mouseX / resolution);
-        let j = Math.floor(mouseY / resolution);
-        grid[i][j].state = 1;
-        grid[i][j].color = colors[Math.floor(Math.random() * colors.length)];
-        grid[i][j].age = 0;
-        updateInfo();
-    }
+  paintCell();
+}
+
+function paintCell() {
+  if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) return;
+  let i = floor(mouseX / resolution);
+  let j = floor(mouseY / resolution);
+  grid[i][j].state = 1;
+  grid[i][j].life = 1;
+  updateInfo();
 }
 
 function togglePlay() {
-    isPlaying = !isPlaying;
-    document.getElementById('start').textContent = isPlaying ? 'Pausar' : 'Iniciar';
+  isPlaying = !isPlaying;
+  document.getElementById("start").textContent = isPlaying ? "Pausar" : "Iniciar";
 }
 
 function resetGrid() {
-    grid = createGrid(cols, rows);
-    generation = 0;
-    population = 0;
-    updateInfo();
+  grid = createGrid(cols, rows);
+  generation = population = 0;
+  updateInfo();
 }
 
 function randomizeGrid() {
-    let density = parseInt(document.getElementById('density').value) / 100;
-    
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-            grid[i][j].state = Math.random() < density ? 1 : 0;
-            if (grid[i][j].state === 1) {
-                grid[i][j].color = colors[Math.floor(Math.random() * colors.length)];
-                grid[i][j].age = 0;
-            }
-        }
+  let density = document.getElementById("density").value / 100;
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      if (random() < density) {
+        grid[i][j].state = 1;
+        grid[i][j].life = random();
+      } else {
+        grid[i][j].state = 0;
+        grid[i][j].life = 0;
+      }
     }
-    
-    generation = 0;
-    updateInfo();
+  }
+  generation = 0;
+  updateInfo();
 }
 
 function clearGrid() {
-    for (let i = 0; i < cols; i++) {
-        for (let j = 0; j < rows; j++) {
-            grid[i][j].state = 0;
-            grid[i][j].age = 0;
-        }
+  for (let i = 0; i < cols; i++) {
+    for (let j = 0; j < rows; j++) {
+      grid[i][j].state = 0;
+      grid[i][j].life = 0;
     }
-    
-    generation = 0;
-    population = 0;
-    updateInfo();
+  }
+  generation = population = 0;
+  updateInfo();
 }
 
 function updateSpeed() {
-    frameRateValue = parseInt(document.getElementById('speed').value);
-    frameRate(frameRateValue);
-    document.getElementById('speed-value').textContent = frameRateValue + ' fps';
+  frameRateValue = parseInt(document.getElementById("speed").value);
+  document.getElementById("speed-value").textContent = frameRateValue + " fps";
 }
 
 function updateDensity() {
-    let densityValue = parseInt(document.getElementById('density').value);
-    document.getElementById('density-value').textContent = densityValue + '%';
+  document.getElementById("density-value").textContent =
+    document.getElementById("density").value + "%";
 }
 
 function updateInfo() {
-    document.getElementById('generation').textContent = 'Generación: ' + generation;
-    document.getElementById('population').textContent = 'Población: ' + population;
+  document.getElementById("generation").textContent =
+    "Generación: " + generation;
+  document.getElementById("population").textContent =
+    "Población: " + population;
 }
