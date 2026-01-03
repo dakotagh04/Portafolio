@@ -1,0 +1,45 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: #f5f4ee;
+  overflow: hidden;
+  font-family: "Courier New", monospace;
+}
+
+/* Canvas */
+canvas {
+  display: block;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* BOTÓN HOME */
+#homeBtn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 9999;
+
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+
+  background: #ffffff;
+  border: 3px solid #355f7c;
+
+  font-size: 26px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+#homeBtn:hover {
+  background: #edeadf;
+  transform: scale(1.1);
+}

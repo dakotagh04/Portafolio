@@ -153,27 +153,69 @@ new p5(p => {
   }
 });
 
-/* -------- PREVIEW 3 -------- */
+/* -------- PREVIEW 3 (Serpiente de bolas infinita con fila continua) -------- */
 new p5(p => {
+  const COLORS = ["#c9b26d", "#4a7fa7", "#355f7c"];
+  const NUM_BALLS = 50;
+  const BALL_RADIUS = 12;
+  const AMPLITUDE = 0.06;
+  const SPEED = 1.2;
+
+  let balls = [];
+
   p.setup = () => {
-    const c = p.createCanvas(
-      document.getElementById('preview3').offsetWidth,
-      document.getElementById('preview3').offsetHeight
-    );
+    const container = document.getElementById('preview3');
+    const c = p.createCanvas(container.offsetWidth, container.offsetHeight);
     c.parent('preview3');
+    p.noStroke();
+
+    // Crear bolas en fila continua
+    for (let i = 0; i < NUM_BALLS; i++) {
+      balls.push({
+        color: COLORS[i % COLORS.length],
+        y: -i * (BALL_RADIUS * 2), // fila inicial
+      });
+    }
   };
 
   p.draw = () => {
-    p.background(235);
-    p.translate(p.width / 2, p.height / 2);
-    p.noFill();
-    p.stroke(0);
-    for (let i = 0; i < 15; i++) {
-      p.rotate(0.015);
-      p.rect(-i * 6, -i * 6, i * 12, i * 12);
+    p.background("#f5f4ee");
+
+    // Primera bola define el movimiento sinusoidal
+    let head = balls[0];
+    head.y += SPEED;
+    let headX = p.width / 2 + p.sin(head.y / 50) * p.width * AMPLITUDE;
+    p.fill(head.color);
+    p.circle(headX, head.y, BALL_RADIUS * 2);
+
+    // Las demás bolas siguen la anterior
+    for (let i = 1; i < balls.length; i++) {
+      let prev = balls[i - 1];
+      let ball = balls[i];
+
+      // Mantener distancia exacta
+      ball.y = prev.y - BALL_RADIUS * 2;
+
+      // Seguir horizontalmente la onda de la cabeza
+      let t = (ball.y) / 50;
+      let x = p.width / 2 + p.sin(t) * p.width * AMPLITUDE;
+
+      p.fill(ball.color);
+      p.circle(x, ball.y, BALL_RADIUS * 2);
+    }
+
+    // Reaparecer la bola que pasó del canvas
+    if (head.y - BALL_RADIUS > p.height) {
+      let first = balls.shift();
+      first.y = balls[balls.length - 1].y - BALL_RADIUS * 2;
+      balls.push(first);
     }
   };
 });
+
+
+
+
 
 /* -------- PREVIEW 4 (Juego de la Vida - obra4) -------- */
 new p5(p => {
