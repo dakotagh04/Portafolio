@@ -80,3 +80,12 @@ footer {
   font-size: 0.9rem;
   color: #777;
 }
+
+/* DESCRIPCIÓN BREVE DE LA OBRA */
+.artwork-desc {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.3rem;
+  font-style: italic;
+}

@@ -15,11 +15,11 @@ canvas {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-/* BOTÓN HOME */
+/* BOTÓN HOME UNIFICADO */
 #homeBtn {
   position: fixed;
-  top: 16px;
-  left: 16px;
+  top: 20px;
+  left: 20px;
   z-index: 9999;
 
   width: 50px;
@@ -27,19 +27,22 @@ canvas {
   border-radius: 50%;
 
   background: #ffffff;
-  border: 3px solid #355f7c;
+  border: 2px solid #355f7c; /* borde azul oscuro coherente con el portafolio */
 
-  font-size: 26px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #355f7c;
+
   cursor: pointer;
-
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 
   transition: transform 0.25s ease, background 0.25s ease;
 }
 
 #homeBtn:hover {
-  background: #edeadf;
+  background: #edeadf; /* beige claro */
   transform: scale(1.1);
 }
+

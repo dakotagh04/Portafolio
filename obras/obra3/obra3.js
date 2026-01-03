@@ -54,11 +54,12 @@ let restartButton;
 function setup() {
   const s = min(windowWidth, windowHeight) * 0.9;
   canvas = createCanvas(s, s);
-
   centerCanvas();
   textFont("monospace");
 
-  initMicrophone();
+  // Inicializamos mic pero NO pedimos permiso todavía
+  mic = new p5.AudioIn();
+
   createRestartButton();
   showStartScreen();
 }
@@ -76,12 +77,30 @@ function windowResized() {
   positionRestartButton();
 }
 
-function initMicrophone() {
-  mic = new p5.AudioIn();
-  mic.start(
-    () => (isMicActive = true),
-    () => (isMicActive = false)
-  );
+function startGame() {
+  gameState = "PLAYING";
+  score = 0;
+  balls = [];
+  pathProgress = ballSpacing * 6;
+
+  // Pedir permiso de micrófono al iniciar el juego
+  if (!isMicActive) {
+    mic.start(
+      () => (isMicActive = true),
+      () => (isMicActive = false)
+    );
+  }
+
+  restartButton.hide();
+
+  const screenLength = height + 200;
+  const numBalls = ceil(screenLength / ballSpacing);
+  for (let i = 0; i < numBalls; i++) {
+    balls.push({
+      colorIndex: floor(random(COLOR_CONFIG.length)),
+      distanceFromFront: i * ballSpacing
+    });
+  }
 }
 
 function showStartScreen() {
@@ -91,30 +110,11 @@ function showStartScreen() {
   positionRestartButton();
 }
 
-function startGame() {
-  gameState = "PLAYING";
-  score = 0;
-  balls = [];
-  pathProgress = ballSpacing * 6;
-  restartButton.html("REINICIAR");
-  restartButton.hide();
-
-  const screenLength = height + 200;
-  const numBalls = ceil(screenLength / ballSpacing);
-
-  for (let i = 0; i < numBalls; i++) {
-    balls.push({
-      colorIndex: floor(random(COLOR_CONFIG.length)),
-      distanceFromFront: i * ballSpacing
-    });
-  }
-}
-
 function draw() {
   background(PALETTE.bg);
 
   if (gameState === "START") {
-    drawStartScreen();
+    drawStartScreenUI();
     return;
   }
 
@@ -182,9 +182,8 @@ function detectVolumeShot() {
   }
 }
 
-function drawStartScreen() {
+function drawStartScreenUI() {
   textAlign(CENTER, CENTER);
-
   fill(PALETTE.blueDark);
   textSize(48);
   text("BALL ATTACK", width / 2, height / 2 - 140);

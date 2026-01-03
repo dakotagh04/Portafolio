@@ -1,51 +1,52 @@
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Portafolio de Arte Generativo</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Portafolio de Arte Generativo</title>
 
-  <!-- p5 -->
-  <script src="libraries/p5.min.js"></script>
+    <!-- p5 -->
+    <script src="libraries/p5.min.js"></script>
 
-  <!-- Estilos -->
-  <link rel="stylesheet" href="style.css">
-</head>
+    <!-- Estilos -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
+  <body>
+    <header>
+      <h1>Portafolio de Arte Generativo</h1>
+      <p>Exploraciones visuales e interactivas</p>
+    </header>
 
-  <header>
-    <h1>Portafolio de Arte Generativo</h1>
-    <p>Exploraciones visuales e interactivas</p>
-  </header>
+    <main class="gallery">
+      <div class="artwork" onclick="openArtwork('obras/obra1/obra1.html')">
+        <div id="preview1" class="preview"></div>
+        <h2>Obra I</h2>
+        <p class="artwork-desc">Figuras poligonales generadas aleatoriamente</p>
+      </div>
 
-  <main class="gallery">
+      <div class="artwork" onclick="openArtwork('obras/obra2/obra2.html')">
+        <div id="preview2" class="preview"></div>
+        <h2>Obra II</h2>
+        <p class="artwork-desc">Piedra, papel y tijera interactivo</p>
+      </div>
 
-    <div class="artwork" onclick="openArtwork('obras/obra1/obra1.html')">
-      <div id="preview1" class="preview"></div>
-      <h2>Obra I</h2>
-    </div>
+      <div class="artwork" onclick="openArtwork('obras/obra3/obra3.html')">
+        <div id="preview3" class="preview"></div>
+        <h2>Obra III</h2>
+        <p class="artwork-desc">Serpiente de bolas descendentes</p>
+      </div>
 
-    <div class="artwork" onclick="openArtwork('obras/obra2/obra2.html')">
-      <div id="preview2" class="preview"></div>
-      <h2>Obra II</h2>
-    </div>
+      <div class="artwork" onclick="openArtwork('obras/obra4/obra4.html')">
+        <div id="preview4" class="preview"></div>
+        <h2>Obra IV</h2>
+        <p class="artwork-desc">Juego de la vida de Conway</p>
+      </div>
+    </main>
 
-    <div class="artwork" onclick="openArtwork('obras/obra3/obra3.html')">
-      <div id="preview3" class="preview"></div>
-      <h2>Obra III</h2>
-    </div>
+    <footer>
+      <p>© 2025 — Portafolio artístico</p>
+    </footer>
 
-    <div class="artwork" onclick="openArtwork('obras/obra4/obra4.html')">
-      <div id="preview4" class="preview"></div>
-      <h2>Obra IV</h2>
-    </div>
-
-  </main>
-
-  <footer>
-    <p>© 2025 — Portafolio artístico</p>
-  </footer>
-
-  <script src="sketch.js"></script>
-</body>
+    <script src="sketch.js"></script>
+  </body>
 </html>

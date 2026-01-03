@@ -1,28 +1,69 @@
-/* ---------------- GLOBAL STYLES ---------------- */
+/* Centrar todo */
 body {
   margin: 0;
-  background: #f5f5f0; /* Fondo por defecto */
+  background: #f5f4ee; /* beige del museo */
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   flex-direction: column;
-  font-family: "Times New Roman", serif; /* se puede mantener global */
+  font-family: "Times New Roman", serif;
+  min-height: 100vh;
 }
 
-/* Botón home siempre visible */
+/* Canvas centrado */
+canvas {
+  display: block;
+  margin: 0 auto;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* Botón home unificado */
 #homeBtn {
   position: fixed;
   top: 20px;
   left: 20px;
   z-index: 9999;
-  font-size: 28px;
+
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background: #fff;
+
+  background: #ffffff;
+  border: 2px solid #355f7c;
+
+  font-size: 28px;
+  font-weight: bold;
+  color: #355f7c;
+
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+#homeBtn:hover {
+  background: #edeadf;
+  transform: scale(1.1);
+}
+
+/* Botón guardar imagen */
+#saveBtn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: #4a7fa7;
+  color: #f5f4ee;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+#saveBtn:hover {
+  background: #355f7c;
+  transform: translateY(-2px);
 }

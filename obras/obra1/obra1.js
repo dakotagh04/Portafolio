@@ -5,7 +5,8 @@ let botonGuardar;
 
 function setup() {
   s = min(windowWidth, windowHeight) * 0.9;
-  createCanvas(s, s);
+  let canvas = createCanvas(s, s);
+  canvas.parent(document.body); // canvas centrado en la página
   colorMode(HSL, 360, 100, 100, 100);
   noStroke();
 
@@ -27,10 +28,25 @@ function setup() {
   artLayer.colorMode(HSL, 360, 100, 100, 100);
   generateGreekArt(artLayer, seed);
 
-  // Botón guardar
+  // --- Nuevo botón guardar centrado debajo del canvas ---
   botonGuardar = createButton('Guardar imagen');
-  botonGuardar.position(10, s + 20);
+  botonGuardar.id('saveBtn');               // id para estilizar con CSS
+  botonGuardar.parent(document.body);       // se añade al body
   botonGuardar.mousePressed(guardarArte);
+  botonGuardar.style('display', 'block');
+  botonGuardar.style('margin', '20px auto 0 auto'); // centrado y separación del canvas
+  botonGuardar.style('font-size', '16px');
+  botonGuardar.style('padding', '10px 20px');
+  botonGuardar.style('border-radius', '10px');
+  botonGuardar.style('background', '#4a7fa7');
+  botonGuardar.style('color', '#f5f4ee');
+  botonGuardar.style('border', 'none');
+  botonGuardar.style('cursor', 'pointer');
+  botonGuardar.style('transition', 'all 0.25s ease');
+
+  // Hover usando JS
+  botonGuardar.mouseOver(() => botonGuardar.style('background', '#355f7c'));
+  botonGuardar.mouseOut(() => botonGuardar.style('background', '#4a7fa7'));
 }
 
 function draw() {
