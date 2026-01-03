@@ -213,10 +213,6 @@ new p5(p => {
   };
 });
 
-
-
-
-
 /* -------- PREVIEW 4 (Juego de la Vida - obra4) -------- */
 new p5(p => {
   const resolution = 8; // tamaño de celda ligeramente mayor
